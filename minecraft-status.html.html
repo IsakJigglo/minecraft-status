@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minecraft Server Status</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    #status { margin: 20px; padding: 10px; border: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+  <h1>Minecraft Server Status</h1>
+  <div id="status">Checking server status...</div>
+
+  <script>
+    const serverIP = "play.wildsmp.org";
+    const url = `https://api.mcsrvstat.us/2/${serverIP}`;
+
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        const statusDiv = document.getElementById('status');
+        if (data.online) {
+          statusDiv.innerHTML = `
+            <p>Server is <strong>online</strong></p>
+            <p>Players: ${data.players.online}/${data.players.max}</p>
+            <p>Version: ${data.version}</p>
+          `;
+        } else {
+          statusDiv.innerHTML = `<p>Server is <strong>offline</strong></p>`;
+        }
+      })
+      .catch(error => {
+        document.getElementById('status').innerHTML = `<p>Error fetching server status.</p>`;
+      });
+  </script>
+</body>
+</html>
